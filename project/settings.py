@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3d party
-
+    'rest_framework',
     #apps
     'home',
     'accounts',

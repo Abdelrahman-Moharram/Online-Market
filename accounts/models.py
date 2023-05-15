@@ -8,7 +8,6 @@ from django.utils.text import slugify
 
 
 
-
 def cap(string):
     new=string[0].upper()
     for i in range(1,len(string),1):
@@ -74,9 +73,10 @@ class UserType(models.Model):
         return self.typeName
 
 class User(AbstractBaseUser):
+
     def imagesave(instance,filename):
         imagename , extension = filename.split(".")
-        return "users/%s.%s"%(instance.id,extension)
+        return "users/%s.%s"%(instance.user_id,extension)
     user_id         = models.UUIDField(unique = True, default = uuid.uuid4,editable = False)
     fname           = models.CharField(max_length=30, verbose_name="First Name")
     lname           = models.CharField(max_length=30, verbose_name="Last Name")
@@ -91,6 +91,7 @@ class User(AbstractBaseUser):
     is_staff        = models.BooleanField(default=False)
     is_superuser    = models.BooleanField(default=False)
     user_type       = models.ForeignKey(UserType, blank=False, null=False, on_delete=models.PROTECT)
+    favourite       = models.ManyToManyField('home.Product')
 
     USERNAME_FIELD  = 'email'
     REQUIRED_FIELDS = ['fname','lname','phone']

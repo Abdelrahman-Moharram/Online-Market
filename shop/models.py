@@ -3,7 +3,9 @@ from accounts.models import User
 import uuid
 
 class ShopOwner(models.Model):
-    user            = models.OneToOneField(User, on_delete=models.CASCADE)
+    user      = models.OneToOneField(User, on_delete=models.CASCADE)
+    def shop_name(self, *args, **kwargs):
+        return Shop.objects.get(shop_owner=ShopOwner.objects.get(user=self.user)).shop_name
     def __str__(self) -> str:
         return str(self.user)
 
@@ -13,7 +15,7 @@ class Shop(models.Model):
         return "shops/%s.%s"%(instance.shop_id,extension)
 
     shop_id         = models.UUIDField(primary_key=True, default=uuid.uuid4, editable = False, unique=True)
-    shop_owner      = models.OneToOneField(ShopOwner, on_delete=models.PROTECT)
+    shop_owner      = models.ForeignKey(ShopOwner, on_delete=models.PROTECT)
     shop_name       = models.CharField(max_length=20, unique=True)
     Created_date    = models.DateField(auto_now=False, blank=True, null=True)
     location        = models.CharField(max_length=40)
